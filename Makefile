@@ -10,8 +10,8 @@ SRC_DIR = src
 HDR_DIR = hdr
 BUILD_DIR = build
 
-SOURCES = $(wildcard $(SRC_DIR)/*.c)
-TARGETS = $(SOURCES:$(SRC_DIR)/%.c=$(BUILD_DIR)/%)
+SOURCES = $(wildcard $(SRC_DIR)/*.cpp)
+TARGETS = $(SOURCES:$(SRC_DIR)/%.cpp=$(BUILD_DIR)/%)
 
 .PHONY: dir
 dir:
@@ -23,5 +23,5 @@ clean:
     
 all: $(TARGETS) 
 
-$(BUILD_DIR)/%: $(SRC_DIR)/%.c
+$(BUILD_DIR)/%: $(SRC_DIR)/%.cpp
 	$(CC) $(CFLAGS) -I$(HDR_DIR) $< -o $@

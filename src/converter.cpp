@@ -1,49 +1,26 @@
-#include <pqueue.hpp>
+#include <opencv2/opencv.hpp>
 
-#include <unistd.h>
-#include <stdlib.h>
+#include "pqueue.hpp"
 
-double randProcessedValue(){
+int main() {
+    int shmidA = shmget(KEY_A, sizeof(PQueue<ImageRaw>), 0);
+    PQueue<ImageRaw> *pqA = (PQueue<ImageRaw> *)shmat(shmidA, NULL, 0);
 
-    return (double)( rand() % 101 ) / 100;
+    int shmidB = shmget(KEY_B, sizeof(PQueue<ProcessedValue>), 0);
+    PQueue<ProcessedValue> *pqB = (PQueue<ProcessedValue> *)shmat(shmidB, NULL, 0);
 
-}
+    while (cv::waitKey(10) != 27) {
+        ImageRaw m;
 
-int main( int argc, char* argv[] ){
+        down(pqA->getSemid(), FULL);
+        down(pqA->getSemid(), BIN);
 
-    srand( time( NULL ) );
+        m = pqA->pop();
+        cv::Mat img(256, 256, CV_8UC3, m.data);
+        cv::imshow("Converter", img);
+        std::cout << "[CONV] got value: " << (int)m.data[0] << std::endl;
 
-    long tickSum = 0;		/* tick sum of processed messages */ 
-    int mesTerm  = 0;		/* number of processed messages */
-
-    PQueue<ImageRaw>* pqA;
-    int shmidA = shmget( KEY_A, sizeof( PQueue<ImageRaw> ), 0 );
-    pqA = ( PQueue<ImageRaw>* )shmat( shmidA, NULL, 0 );
-
-    PQueue<ProcessedValue>* pqB;
-    int shmidB = shmget( KEY_B, sizeof( PQueue<ProcessedValue> ), 0 );
-    pqB = ( PQueue<ProcessedValue>* )shmat( shmidB, NULL, 0 );
-    
-
-    while( 1 ){
-
-	sleep( 2 );
-
-	ImageRaw tmp = {0}; 
-
-	down( pqA->getSemid(), FULL );
-	down( pqA->getSemid(), BIN );
-
-	puts( "\nSekcja krytyczna przetwornika\n" );
-
-	tmp = pqA->pop();
-	pqA->catQueue();
-
-	up( pqA->getSemid(), BIN );
-	up( pqA->getSemid(), EMPTY );
-
-	std::cout << "Przetworzona wartosc to " << randProcessedValue() << std::endl; 
-	
+        up(pqA->getSemid(), BIN);
+        up(pqA->getSemid(), EMPTY);
     }
-
 }

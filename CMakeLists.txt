@@ -16,7 +16,11 @@ include_directories(
 )
 
 add_executable(init src/initializer.cpp)
+
 add_executable(gene src/generator.cpp)
 target_link_libraries(gene ${OpenCV_LIBS})
+
 add_executable(conv src/converter.cpp)
+target_link_libraries(conv ${OpenCV_LIBS})
+
 add_executable(dest src/destroyer.cpp)

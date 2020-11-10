@@ -1,5 +1,3 @@
-#include <unistd.h>
-
 #include "pqueue.hpp"
 
 int main() {

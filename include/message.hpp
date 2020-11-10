@@ -1,11 +1,12 @@
 #pragma once
 
+#include <cstdint>
 #include <ctime>
 
 #define IMG_SIZE 256 * 256 * 3
 
 typedef struct ImageRaw {
-    char data[IMG_SIZE];
+    uint8_t data[IMG_SIZE];
     clock_t timestamp;
 } ImageRaw;
 

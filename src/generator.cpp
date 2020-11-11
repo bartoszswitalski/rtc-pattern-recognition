@@ -33,7 +33,7 @@ int main() {
 
     while (true) {
         camera >> img;
-        cv::resize(img, img, cv::Size(256, 256), 0, 0, CV_INTER_LINEAR);
+        cv::resize(img, img, cv::Size(256, 256), 0, 0, cv::INTER_LINEAR);
         uint8_t *pixels = (uint8_t *)img.data;
 
         memcpy(&m.data, pixels, sizeof(uint8_t) * IMG_SIZE);

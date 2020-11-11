@@ -11,16 +11,28 @@ int main() {
 
     while (cv::waitKey(10) != 27) {
         ImageRaw m;
+        ProcessedValue v;
 
         down(pqA->getSemid(), FULL);
         down(pqA->getSemid(), BIN);
 
         m = pqA->pop();
+        v.data = (int)m.data[0];
         cv::Mat img(256, 256, CV_8UC3, m.data);
         cv::imshow("Converter", img);
-        std::cout << "[CONV] got value: " << (int)m.data[0] << std::endl;
+        std::cout << "[CONV] got value: " << v.data << std::endl;
 
         up(pqA->getSemid(), BIN);
         up(pqA->getSemid(), EMPTY);
+
+
+        down(pqB->getSemid(), EMPTY);
+        down(pqB->getSemid(), BIN);
+
+        v.timestamp = clock();
+        pqB->push(&v);
+
+        up(pqB->getSemid(), BIN);
+        up(pqB->getSemid(), FULL);
     }
 }

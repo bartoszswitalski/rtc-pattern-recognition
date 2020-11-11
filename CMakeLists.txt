@@ -23,4 +23,6 @@ target_link_libraries(gene ${OpenCV_LIBS})
 add_executable(conv src/converter.cpp)
 target_link_libraries(conv ${OpenCV_LIBS})
 
+add_executable(disp src/displayer.cpp)
+
 add_executable(dest src/destroyer.cpp)

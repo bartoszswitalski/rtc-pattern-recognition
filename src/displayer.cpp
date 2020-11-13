@@ -1,20 +1,12 @@
-#include "pqueue.hpp"
+#include "displaywindow.hpp"
 
-int main() {
-    int shmidB = shmget(KEY_B, sizeof(PQueue<ProcessedValue>), 0);
-    PQueue<ProcessedValue> *pqB = (PQueue<ProcessedValue> *)shmat(shmidB, NULL, 0);
+int main(int argc, char *argv[]) {
+    // Make a new app
+    auto app = Gtk::Application::create(argc, argv, "com.lg.clock");
 
-    while(true) {
-        ProcessedValue v;
+    // Instance a Window
+    DisplayWindow disp;
 
-        down(pqB->getSemid(), FULL);
-        down(pqB->getSemid(), BIN);
-
-        v = pqB->pop();
-        std::cout << "[DISP] got value: " << v.data << std::endl;
-
-        up(pqB->getSemid(), BIN);
-        up(pqB->getSemid(), EMPTY);
-
-    }
+    // Tell the app to run the Window
+    return app->run(disp);
 }

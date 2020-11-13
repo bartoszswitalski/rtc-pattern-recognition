@@ -20,7 +20,7 @@ int main() {
         v.data = (int)m.data[0];
         cv::Mat img(256, 256, CV_8UC3, m.data);
         cv::imshow("Converter", img);
-        std::cout << "[CONV] got value: " << v.data << std::endl;
+        std::cout << "[CONV] got value: " << (int)m.data[0] << std::endl;
 
         up(pqA->getSemid(), BIN);
         up(pqA->getSemid(), EMPTY);

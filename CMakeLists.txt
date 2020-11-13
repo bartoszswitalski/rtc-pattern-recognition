@@ -9,20 +9,23 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 add_compile_options(-Wall -Wextra -pedantic)
 
 find_package(OpenCV REQUIRED)
+find_package(PkgConfig)
+
+pkg_check_modules(GTKMM gtkmm-3.0)
+
+add_subdirectory(src) 
 
 include_directories(
     include
     ${OpenCV_INCLUDE_DIRS}
 )
 
-add_executable(init src/initializer.cpp)
+add_executable(init src/initializer.cpp src/pqueue.cpp src/semaphoreop.cpp)
 
-add_executable(gene src/generator.cpp)
+add_executable(gene src/generator.cpp src/pqueue.cpp src/semaphoreop.cpp)
 target_link_libraries(gene ${OpenCV_LIBS})
 
-add_executable(conv src/converter.cpp)
+add_executable(conv src/converter.cpp src/pqueue.cpp src/semaphoreop.cpp)
 target_link_libraries(conv ${OpenCV_LIBS})
-
-add_executable(disp src/displayer.cpp)
 
 add_executable(dest src/destroyer.cpp)

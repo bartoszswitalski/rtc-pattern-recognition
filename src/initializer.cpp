@@ -4,8 +4,8 @@ int main() {
     int semid_A = semget(SKEY_A, SEM_NUM, IPC_CREAT | 0600);
     int semid_B = semget(SKEY_B, SEM_NUM, IPC_CREAT | 0600);
 
-    PQueue<ImageRaw> *pqA = setSHM<ImageRaw>(PQ_A);
-    PQueue<ProcessedValue> *pqB = setSHM<ProcessedValue>(PQ_B);
+    setSHM<ImageRaw>(PQ_A);
+    setSHM<ProcessedValue>(PQ_B);
 
     semctl(semid_A, FULL, SETVAL, 0);
     semctl(semid_B, FULL, SETVAL, 0);

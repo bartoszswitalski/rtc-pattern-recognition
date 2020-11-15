@@ -40,7 +40,6 @@ int main() {
         cv::resize(img, img, cv::Size(256, 256), 0, 0, cv::INTER_LINEAR);
 
         memcpy(&m.data, img.data, sizeof(uint8_t) * IMG_SIZE);
-
         // TODO:
         //   should timestamp be set before mutex or inside mutex?
         //   or multiple timestamp variables?

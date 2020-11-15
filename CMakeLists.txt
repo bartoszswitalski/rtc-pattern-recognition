@@ -19,15 +19,15 @@ include_directories(
     ${GTKMM_INCLUDE_DIRS}
 )
 
-add_executable(init src/initializer.cpp src/pqueue.cpp src/semaphoreop.cpp)
+add_executable(init src/initializer.cpp src/semaphoreop.cpp)
 
-add_executable(gene src/generator.cpp src/pqueue.cpp src/semaphoreop.cpp)
+add_executable(gene src/generator.cpp src/semaphoreop.cpp)
 target_link_libraries(gene ${OpenCV_LIBS})
 
-add_executable(conv src/converter.cpp src/pqueue.cpp src/semaphoreop.cpp)
+add_executable(conv src/converter.cpp src/semaphoreop.cpp)
 target_link_libraries(conv ${OpenCV_LIBS})
 
-add_executable(disp src/displayer.cpp src/displaywindow.cpp src/pqueue.cpp src/semaphoreop.cpp)
+add_executable(disp src/displayer.cpp src/displaywindow.cpp src/semaphoreop.cpp)
 target_link_libraries(disp ${GTKMM_LIBRARIES})
 
 add_executable(dest src/destroyer.cpp)

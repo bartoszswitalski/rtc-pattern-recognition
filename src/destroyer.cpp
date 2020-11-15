@@ -13,13 +13,14 @@ int main() {
     shmctl(SKEY_A, IPC_RMID, NULL);
     shmctl(SKEY_B, IPC_RMID, NULL);
 
-    semctl(pqA->getSemid(), BIN, IPC_RMID);
-    semctl(pqA->getSemid(), EMPTY, IPC_RMID);
     semctl(pqA->getSemid(), FULL, IPC_RMID);
-
-    semctl(pqB->getSemid(), BIN, IPC_RMID);
-    semctl(pqB->getSemid(), EMPTY, IPC_RMID);
     semctl(pqB->getSemid(), FULL, IPC_RMID);
+
+    semctl(pqA->getSemid(), EMPTY, IPC_RMID);
+    semctl(pqB->getSemid(), EMPTY, IPC_RMID);
+
+    semctl(pqA->getSemid(), BIN, IPC_RMID);
+    semctl(pqB->getSemid(), BIN, IPC_RMID);
 
     return 0;
 }

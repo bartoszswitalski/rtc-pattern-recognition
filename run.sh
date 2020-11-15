@@ -1,0 +1,4 @@
+./init &
+./gene &
+./conv &
+./disp &

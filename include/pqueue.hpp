@@ -117,5 +117,3 @@ PQueue<T> *setSHM(char group) {
 
     return pq;
 }
-
-void setSemaphores();

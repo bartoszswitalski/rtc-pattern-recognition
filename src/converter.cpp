@@ -7,7 +7,7 @@
 int main(int argc, char *argv[]) {
     if (argc != 2) {
         std::cerr << "Usage: ./conv path-to-model" << std::endl;
-        exit(1);
+        return 1;
     }
 
     torch::jit::script::Module model;
@@ -16,11 +16,11 @@ int main(int argc, char *argv[]) {
         model = torch::jit::load(argv[1]);
     } catch (const c10::Error &e) {
         std::cerr << "Failed to load model." << std::endl;
-        exit(1);
+        return 1;
     }
-    return 0;
 
-    // TODO: use the loaded model
+    model.eval();
+    torch::NoGradGuard no_grad;
 
     int shmidA = shmget(KEY_A, sizeof(PQueue<ImageRaw>), 0);
     PQueue<ImageRaw> *pqA = (PQueue<ImageRaw> *)shmat(shmidA, NULL, 0);
@@ -31,7 +31,9 @@ int main(int argc, char *argv[]) {
     ImageRaw m;
     ProcessedValue v;
 
-    while (true) {
+    at::Tensor tensor;
+
+    while (cv::waitKey(10) != 27) {
         down(pqA->getSemid(), FULL);
         down(pqA->getSemid(), BIN);
 
@@ -42,9 +44,15 @@ int main(int argc, char *argv[]) {
 
         cv::Mat img(256, 256, CV_8UC3, m.data);
         cv::imshow("Converter", img);
-        std::cout << "[CONV] got value: " << (int)m.data[0] << std::endl;
 
-        v.data = (int)m.data[0];
+        tensor = torch::from_blob(m.data, {256, 256, 3}, at::kByte).toType(c10::kFloat).div(255);
+        tensor = tensor.permute({2, 0, 1});
+        tensor.unsqueeze_(0);
+
+        tensor = model.forward({tensor}).toTensor();
+
+        v.data = tensor[0][0].item<float>();
+        std::cout << "[CONV] predicted: " << v.data << std::endl;
         // TODO:
         //   should timestamp be set before mutex or inside mutex?
         //   or multiple timestamp variables?

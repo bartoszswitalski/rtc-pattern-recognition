@@ -6,8 +6,6 @@
 
 #include <iostream>
 
-static struct sembuf buf;
+void up(short unsigned int semid, short unsigned int semnum);
 
-void up(int semid, int semnum);
-
-void down(int semid, int semnum);
+void down(short unsigned int semid, short unsigned int semnum);

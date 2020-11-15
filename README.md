@@ -27,3 +27,8 @@ wget https://download.pytorch.org/libtorch/cpu/libtorch-win-shared-with-deps-deb
 unzip libtorch-cxx11-abi-shared-with-deps-1.7.0+cpu.zip
 export Torch_DIR=~/libtorch
 ```
+
+### Download pretrained model
+```
+./download_model.sh
+```

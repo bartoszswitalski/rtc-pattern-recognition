@@ -4,15 +4,21 @@
 
 #include "pqueue.hpp"
 
-int main() {
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        std::cerr << "Usage: ./conv path-to-model" << std::endl;
+        exit(1);
+    }
+
     torch::jit::script::Module model;
 
     try {
-        model = torch::jit::load("");
+        model = torch::jit::load(argv[1]);
     } catch (const c10::Error &e) {
-        std::cerr << "Error loading the model" << std::endl;
+        std::cerr << "Failed to load model." << std::endl;
         exit(1);
     }
+    return 0;
 
     // TODO: use the loaded model
 

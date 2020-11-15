@@ -1,4 +1,6 @@
+#!/bin/bash
+
 ./init &
 ./gene &
-./conv &
+./conv ../model.pth &
 ./disp &

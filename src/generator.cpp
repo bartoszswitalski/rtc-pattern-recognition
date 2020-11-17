@@ -54,7 +54,7 @@ int main() {
         up(pqA->getSemid(), BIN);
         up(pqA->getSemid(), FULL);
 
-        std::cout << "[GENE] added value: " << (int)m.data[0] << std::endl;
+        //std::cout << "[GENE] added value: " << (int)m.data[0] << std::endl;
     }
 
     return 0;

@@ -6,6 +6,8 @@ mkdir build
 cd build
 cmake ..
 make
+
+./configure
 ../run.sh
 ```
 

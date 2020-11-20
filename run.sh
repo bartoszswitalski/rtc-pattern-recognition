@@ -2,5 +2,5 @@
 
 ./init
 ./gene &
-./conv &
+./conv config.txt &
 ./disp &

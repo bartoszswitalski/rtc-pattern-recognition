@@ -59,7 +59,7 @@ int main() {
     };
 
     std::ofstream config_file;
-    config_file.open("config_file.txt");
+    config_file.open("config.txt");
     config_file << h_min << std::endl;
     config_file << s_min << std::endl;
     config_file << v_min << std::endl;

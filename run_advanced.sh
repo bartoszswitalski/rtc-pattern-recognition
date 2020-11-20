@@ -6,7 +6,7 @@
 GENE_PID=$!
 taskset -cp 0 $GENE_PID
 
-./conv &
+./conv config.txt &
 CONV_PID=$!
 taskset -cp 1 $CONV_PID
 

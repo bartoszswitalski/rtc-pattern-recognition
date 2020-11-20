@@ -1,12 +1,12 @@
 #include <algorithm>
+#include <fstream>
 #include <opencv2/opencv.hpp>
 #include <vector>
 
 #include "pqueue.hpp"
 
-// TODO: fine-tune iamge processing
-// TODO: configure background and skin color
-// TODO: dynamic background and skin color detection
+int h_min, h_max, s_min, s_max, v_min, v_max;
+
 double process(cv::Mat img) {
     if (img.empty()) {
         std::cout << "Image is empty." << std::endl;
@@ -16,13 +16,8 @@ double process(cv::Mat img) {
     cv::Mat hsv;
     cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
 
-    cv::Mat channels[3];
-    cv::split(img, channels);
-
-    cv::Mat thresh = channels[1].clone();
-    // TODO: skin color fine-tuning, 130-180
-    //cv::threshold(thresh, thresh, 130, 255, cv::THRESH_BINARY);
-    cv::inRange(hsv, cv::Scalar(0, 20, 160), cv::Scalar(255, 255, 255), thresh);
+    cv::Mat thresh;
+    cv::inRange(hsv, cv::Scalar(h_min, s_min, v_min), cv::Scalar(h_max, s_max, v_max), thresh);
 
     std::vector<std::vector<cv::Point>> contours;
     cv::findContours(thresh.clone(), contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
@@ -81,7 +76,22 @@ double process(cv::Mat img) {
     return a;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        std::cout << "Usage: ./converter config.txt" << std::endl;
+        return 1;
+    }
+
+    std::ifstream config(argv[1]);
+
+    if (!config.is_open()) {
+        std::cout << "Failed to open config file." << std::endl;
+        return 1;
+    }
+
+    config >> h_min >> s_min >> v_min >> h_max >> s_max >> v_max;
+    config.close();
+
     int shmidA = shmget(KEY_A, sizeof(PQueue<ImageRaw>), 0);
     PQueue<ImageRaw> *pqA = (PQueue<ImageRaw> *)shmat(shmidA, NULL, 0);
 

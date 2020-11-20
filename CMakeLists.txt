@@ -19,6 +19,9 @@ include_directories(
     ${GTKMM_INCLUDE_DIRS}
 )
 
+add_executable(configure src/configure.cpp)
+target_link_libraries(configure ${OpenCV_LIBS})
+
 add_executable(init src/initializer.cpp src/semaphoreop.cpp)
 
 add_executable(gene src/generator.cpp src/semaphoreop.cpp)

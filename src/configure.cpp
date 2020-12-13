@@ -1,25 +1,5 @@
 #include "configure.hpp"
 
-bool getHSV(int event, int x, int y, int flags, void* param){
-
-    if (event == cv::EVENT_LBUTTONDOWN) {
-        cv::Point p(x, y);
-
-        int h = hsv.at<cv::Vec3b>(p)[0];
-        int s = hsv.at<cv::Vec3b>(p)[1];
-        int v = hsv.at<cv::Vec3b>(p)[2];
-
-        global_h_min = std::min(H_MIN, h);
-        global_s_min = std::min(S_MIN, s);
-        global_v_min = std::min(V_MIN, v);
-
-        global_h_max = std::max(H_MAX, h);
-        global_s_max = std::max(S_MAX, s);
-        global_v_max = std::max(V_MAX, v);
-    }
-
-}
-
 int main() {
     cv::VideoCapture camera(CAMERA_IDX);
 
@@ -47,13 +27,13 @@ int main() {
             int s = hsv.at<cv::Vec3b>(p)[1];
             int v = hsv.at<cv::Vec3b>(p)[2];
 
-            global_h_min = std::min(H_MIN, h);
-            global_s_min = std::min(S_MIN, s);
-            global_v_min = std::min(V_MIN, v);
+            global_h_min = std::min(global_h_min, h);
+            global_s_min = std::min(global_s_min, s);
+            global_v_min = std::min(global_v_min, v);
 
-            global_h_max = std::max(H_MAX, h);
-            global_s_max = std::max(S_MAX, s);
-            global_v_max = std::max(V_MAX, v);
+            global_h_max = std::max(global_h_max, h);
+            global_s_max = std::max(global_s_max, s);
+            global_v_max = std::max(global_v_max, v);
         }
     });
 

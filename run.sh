@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./init &
+./init
 ./gene &
-./conv ../model.pth &
+./conv config.txt &
 ./disp &

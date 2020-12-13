@@ -1,10 +1,12 @@
 #include "displaywindow.hpp"
 
+
+
 DisplayWindow::DisplayWindow() {
     shmidB = shmget(KEY_B, sizeof(PQueue<ProcessedValue>), 0);
     pqB = (PQueue<ProcessedValue> *)shmat(shmidB, NULL, 0);
 
-    set_default_size(180, 40);
+    set_default_size(WIDTH, HEIGHT);
     set_title("Displayer");
 
     Gtk::Box *vbox = Gtk::manage(new Gtk::VBox);

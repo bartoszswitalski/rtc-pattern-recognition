@@ -10,12 +10,12 @@
 #define SPACE 32
 #define DELAY 10
 
-int global_h_max = 255;
-int global_s_max = 255;
-int global_v_max = 255;
-int global_h_min = 0;
-int global_s_min = 0;
-int global_v_min = 0;
+int global_h_max = 0;
+int global_s_max = 0;
+int global_v_max = 0;
+int global_h_min = 255;
+int global_s_min = 255;
+int global_v_min = 255;
 
 cv::Mat img, hsv, thresh;
 std::vector<cv::Point> points;

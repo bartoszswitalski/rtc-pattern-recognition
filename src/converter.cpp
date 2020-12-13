@@ -1,11 +1,4 @@
-#include <algorithm>
-#include <fstream>
-#include <opencv2/opencv.hpp>
-#include <vector>
-
-#include "pqueue.hpp"
-
-int h_min, h_max, s_min, S_MAX, V_MIN, V_MAX;
+#include "converter.hpp"
 
 double process(cv::Mat img) {
     if (img.empty()) {
@@ -17,7 +10,8 @@ double process(cv::Mat img) {
     cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
 
     cv::Mat thresh;
-    cv::inRange(hsv, cv::Scalar(h_min, s_min, V_MIN), cv::Scalar(h_max, S_MAX, V_MAX), thresh);
+    cv::inRange(hsv, cv::Scalar(global_h_min, global_s_min, global_v_min),
+                cv::Scalar(global_h_max, global_s_max, global_v_max), thresh);
 
     std::vector<std::vector<cv::Point>> contours;
     cv::findContours(thresh.clone(), contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
@@ -31,29 +25,30 @@ double process(cv::Mat img) {
     }
 
     cv::Mat mask = cv::Mat::zeros(img.rows, img.cols, CV_8UC1);
-    cv::drawContours(mask, contours, 0, 255, cv::FILLED);
+    cv::drawContours(mask, contours, CONTOUR_IDX, MAX_COLOR, cv::FILLED);
 
-    std::vector<std::vector<cv::Point>> hulls(1);
-    cv::convexHull(contours[0], hulls[0]);
+    std::vector<std::vector<cv::Point>> hulls(HULLS_NUMBER);
+    cv::convexHull(contours[LONGEST_CONTOUR], hulls[MAIN_HULL]);
 
     cv::Mat hull_mask = cv::Mat::zeros(img.rows, img.cols, CV_8UC1);
-    cv::drawContours(hull_mask, hulls, 0, 255, cv::FILLED);
+    cv::drawContours(hull_mask, hulls, CONTOUR_IDX, MAX_COLOR, cv::FILLED);
 
-    cv::Point center(0, 0);
+    cv::Point center(INIT_ZERO, INIT_ZERO);
 
     for (cv::Point p : contours[0]) {
         center += p;
     }
 
-    center.x /= contours[0].size();
-    center.y /= contours[0].size();
+    center.x /= contours[LONGEST_CONTOUR].size();
+    center.y /= contours[LONGEST_CONTOUR].size();
 
-    cv::circle(img, center, 2, cv::Scalar(0, 0, 255), cv::FILLED);
+    // Blue colored circle
+    cv::circle(img, center, POINT_RADIUS, cv::Scalar(MIN_COLOR, MIN_COLOR, MAX_COLOR), cv::FILLED);
 
     cv::Point max_point;
-    long long max_dist = 0;
+    long long max_dist = INIT_ZERO;
 
-    for (cv::Point p : hulls[0]) {
+    for (cv::Point p : hulls[MAIN_HULL]) {
         long long dist = (center.x - p.x) * (center.x - p.x) + (center.y - p.y) * (center.y - p.y);
 
         if (dist > max_dist) {
@@ -62,7 +57,8 @@ double process(cv::Mat img) {
         }
     }
 
-    cv::circle(img, max_point, 2, cv::Scalar(255, 0, 0), cv::FILLED);
+    // Red colored circle
+    cv::circle(img, max_point, POINT_RADIUS, cv::Scalar(MAX_COLOR, MIN_COLOR, MIN_COLOR), cv::FILLED);
 
     double dy = center.y - max_point.y;
     double dx = center.x - max_point.x;
@@ -77,19 +73,19 @@ double process(cv::Mat img) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 2) {
+    if (argc != CONV_ARGS) {
         std::cout << "Usage: ./converter config.txt" << std::endl;
         return 1;
     }
 
-    std::ifstream config(argv[1]);
+    std::ifstream config(argv[CONFIG_IDX]);
 
     if (!config.is_open()) {
         std::cout << "Failed to open config file." << std::endl;
         return 1;
     }
 
-    config >> h_min >> s_min >> V_MIN >> h_max >> S_MAX >> V_MAX;
+    config >> global_h_min >> global_s_min >> global_v_min >> global_h_max >> global_s_max >> global_v_max;
     config.close();
 
     int shmidA = shmget(KEY_A, sizeof(PQueue<ImageRaw>), 0);
@@ -102,7 +98,7 @@ int main(int argc, char *argv[]) {
     ProcessedValue v;
 
     // TODO: while true
-    while (cv::waitKey(10) != 27) {
+    while (cv::waitKey(DELAY) != ESC_KEY) {
         down(pqA->getSemid(), FULL);
         down(pqA->getSemid(), BIN);
 
@@ -111,7 +107,7 @@ int main(int argc, char *argv[]) {
         up(pqA->getSemid(), BIN);
         up(pqA->getSemid(), EMPTY);
 
-        cv::Mat img(256, 256, CV_8UC3, m.data);
+        cv::Mat img(MAX_PIXELS, MAX_PIXELS, CV_8UC3, m.data);
         cv::imshow("Converter", img);
 
         v.data = process(img);

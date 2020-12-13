@@ -5,6 +5,9 @@
 
 #include "pqueue.hpp"
 
+#define WIDTH 180
+#define HEIGHT 40
+
 class DisplayWindow : public Gtk::Window {
     public:
         DisplayWindow();

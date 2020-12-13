@@ -3,7 +3,8 @@
 #include <cstdint>
 #include <ctime>
 
-#define IMG_SIZE 256 * 256 * 3
+#define MAX_PIXELS 256
+#define IMG_SIZE MAX_PIXELS * MAX_PIXELS * 3
 
 typedef struct ImageRaw {
     uint8_t data[IMG_SIZE];

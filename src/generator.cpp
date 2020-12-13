@@ -1,55 +1,51 @@
-#include <algorithm>
-#include <opencv2/opencv.hpp>
-
-#include "pqueue.hpp"
+#include "generator.hpp"
 
 cv::Rect getCropROI(cv::VideoCapture *camera) {
     cv::Mat img;
     *camera >> img;
 
-    int w = img.size().width;
-    int h = img.size().height;
+    int width = img.size().width;
+    int height = img.size().height;
 
-    int size = std::min(w, h);
+    int size = std::min(width, height);
 
-    int dw = std::abs(w - size);
-    int dh = std::abs(h - size);
+    int dw = std::abs(width - size);
+    int dh = std::abs(height - size);
 
     return cv::Rect(dw / 2, dh / 2, size, size);
 }
 
 int main() {
-    cv::VideoCapture camera(-1);
+    cv::VideoCapture camera(CAMERA_IDX);
 
     if (!camera.isOpened()) {
         std::cerr << "ERROR: Could not open camera" << std::endl;
         return 1;
     }
 
-    cv::Rect roi = getCropROI(&camera);
-
     int shmidA = shmget(KEY_A, sizeof(PQueue<ImageRaw>), 0);
     PQueue<ImageRaw> *pqA = (PQueue<ImageRaw> *)shmat(shmidA, NULL, 0);
 
+    cv::Rect roi = getCropROI(&camera);
     cv::Mat img;
-    ImageRaw m;
+    ImageRaw message;
 
     while (true) {
         camera >> img;
         img = img(roi);
-        cv::resize(img, img, cv::Size(256, 256), 0, 0, cv::INTER_LINEAR);
+        cv::resize(img, img, cv::Size(MAX_PIXELS, MAX_PIXELS), 0, 0, cv::INTER_LINEAR);
 
-        memcpy(&m.data, img.data, sizeof(uint8_t) * IMG_SIZE);
+        memcpy(&message.data, img.data, sizeof(uint8_t) * IMG_SIZE);
         // TODO:
         //   should timestamp be set before mutex or inside mutex?
         //   or multiple timestamp variables?
         //   timestampInit, timestampPush, timestampPop
-        m.timestamp = clock();
+        message.timestamp = clock();
 
         down(pqA->getSemid(), EMPTY);
         down(pqA->getSemid(), BIN);
 
-        pqA->push(&m);
+        pqA->push(&message);
 
         up(pqA->getSemid(), BIN);
         up(pqA->getSemid(), FULL);

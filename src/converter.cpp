@@ -5,7 +5,7 @@
 
 #include "pqueue.hpp"
 
-int h_min, h_max, s_min, s_max, v_min, v_max;
+int h_min, h_max, s_min, S_MAX, V_MIN, V_MAX;
 
 double process(cv::Mat img) {
     if (img.empty()) {
@@ -17,7 +17,7 @@ double process(cv::Mat img) {
     cv::cvtColor(img, hsv, cv::COLOR_BGR2HSV);
 
     cv::Mat thresh;
-    cv::inRange(hsv, cv::Scalar(h_min, s_min, v_min), cv::Scalar(h_max, s_max, v_max), thresh);
+    cv::inRange(hsv, cv::Scalar(h_min, s_min, V_MIN), cv::Scalar(h_max, S_MAX, V_MAX), thresh);
 
     std::vector<std::vector<cv::Point>> contours;
     cv::findContours(thresh.clone(), contours, cv::RETR_EXTERNAL, cv::CHAIN_APPROX_NONE);
@@ -89,7 +89,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    config >> h_min >> s_min >> v_min >> h_max >> s_max >> v_max;
+    config >> h_min >> s_min >> V_MIN >> h_max >> S_MAX >> V_MAX;
     config.close();
 
     int shmidA = shmget(KEY_A, sizeof(PQueue<ImageRaw>), 0);

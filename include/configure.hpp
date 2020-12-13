@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <fstream>
 
-#define CAMERA_IDX 2
+#define CAMERA_IDX 0
 #define SPACE 32
 #define DELAY 10
 

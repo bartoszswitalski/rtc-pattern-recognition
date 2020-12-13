@@ -34,6 +34,7 @@ public:
     ~PQueue() {};
 
     bool push(T *m) {
+        m->tstamp.push_time = clock();
         this->buf[this->bufSize] = *m;
         (this->bufSize)++;
 
@@ -42,21 +43,26 @@ public:
 
     T pop() {
         T m;
-
+        
         if (this->bufSize == 0) {
             // TODO
-        } else if (this->bufSize == 1) {
-            m = this->buf[0];
-            this->bufSize = 0;
         } else {
             m = this->buf[0];
+            m.tstamp.pop_time = clock();
+        
+            if (this->bufSize == 1) {
+                this->bufSize = 0;
 
-            for (int index = 0; index < this->bufSize - 1; ++index) {
-                this->buf[index] = this->buf[index + 1];
+            } else {
+                for (int index = 0; index < this->bufSize - 1; ++index) {
+                    this->buf[index] = this->buf[index + 1];
+                }
+
+                --this->bufSize;
             }
-
-            --this->bufSize;
         }
+        
+       
 
         return m;
     }

@@ -111,11 +111,8 @@ int main(int argc, char *argv[]) {
         cv::imshow("Converter", img);
 
         v.data = process(img);
-        // TODO:
-        //   should timestamp be set before mutex or inside mutex?
-        //   or multiple timestamp variables?
-        //   timestampInit, timestampPush, timestampPop
-        v.timestamp = clock();
+        v.tstamp.init_time = clock();
+        v.img_tstamp = m.tstamp;
 
         down(pqB->getSemid(), EMPTY);
         down(pqB->getSemid(), BIN);

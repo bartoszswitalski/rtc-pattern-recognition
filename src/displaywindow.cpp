@@ -31,10 +31,12 @@ bool DisplayWindow::on_new_value() {
     down(pqB->getSemid(), BIN);
 
     v = pqB->pop();
-    view->set_text(std::to_string(v.data));
-
+   
     up(pqB->getSemid(), BIN);
     up(pqB->getSemid(), EMPTY);
+
+    view->set_text(std::to_string(v.data));
+    // std::cout<<v.img_tstamp.init_time<<" "<<v.img_tstamp.push_time<<" "<<v.img_tstamp.pop_time<<" "<<v.tstamp.init_time<<" "<<v.tstamp.push_time<<" "<<v.tstamp.pop_time<<std::endl;
 
     return true;
 }

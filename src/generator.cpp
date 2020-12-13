@@ -36,11 +36,7 @@ int main() {
         cv::resize(img, img, cv::Size(MAX_PIXELS, MAX_PIXELS), 0, 0, cv::INTER_LINEAR);
 
         memcpy(&message.data, img.data, sizeof(uint8_t) * IMG_SIZE);
-        // TODO:
-        //   should timestamp be set before mutex or inside mutex?
-        //   or multiple timestamp variables?
-        //   timestampInit, timestampPush, timestampPop
-        message.timestamp = clock();
+        message.tstamp.init_time = clock();
 
         down(pqA->getSemid(), EMPTY);
         down(pqA->getSemid(), BIN);

@@ -42,7 +42,7 @@ bool DisplayWindow::on_new_value() {
 
 void DisplayWindow::log_time(ProcessedValue v) {
     std::ofstream fout;
-    fout.open("times.log", std::ios::app);
+    fout.open("../visuals/times.log", std::ios::app);
     fout<<std::chrono::duration_cast<std::chrono::nanoseconds>(v.img_tstamp.init_time.time_since_epoch()).count()<<" "
         <<std::chrono::duration_cast<std::chrono::nanoseconds>(v.img_tstamp.push_time.time_since_epoch()).count()<<" "
         <<std::chrono::duration_cast<std::chrono::nanoseconds>(v.img_tstamp.pop_time.time_since_epoch()).count()<<" "

@@ -2,6 +2,7 @@
 
 #include <gtkmm.h>
 #include <string>
+#include <fstream>
 
 #include "pqueue.hpp"
 

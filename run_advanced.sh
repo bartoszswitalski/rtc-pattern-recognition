@@ -2,14 +2,8 @@
 
 ./init
 
-./gene &
-GENE_PID=$!
-taskset -cp 0 $GENE_PID
+taskset -c 1 ./gene &
 
-./conv config.txt &
-CONV_PID=$!
-taskset -cp 1 $CONV_PID
+taskset -c 1 ./conv config.txt &
 
-./disp &
-DISP_PID=$!
-taskset -cp 2 $DISP_PID
+taskset -c 1 ./disp &

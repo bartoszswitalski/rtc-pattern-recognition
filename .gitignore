@@ -1,9 +1,10 @@
+.vscode/
 build/
 .idea/
-.vscode/
 visuals/.idea/
 visuals/venv/
 visuals/output.txt
 visuals/graph.png
 *.pth
+times.log
 cmake-build-debug/

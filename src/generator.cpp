@@ -36,7 +36,7 @@ int main() {
         cv::resize(img, img, cv::Size(MAX_PIXELS, MAX_PIXELS), 0, 0, cv::INTER_LINEAR);
 
         memcpy(&message.data, img.data, sizeof(uint8_t) * IMG_SIZE);
-        message.tstamp.init_time = clock();
+        message.tstamp.init_time = std::chrono::system_clock::now();
 
         down(pqA->getSemid(), EMPTY);
         down(pqA->getSemid(), BIN);

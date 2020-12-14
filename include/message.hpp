@@ -1,15 +1,17 @@
 #pragma once
 
 #include <cstdint>
-#include <ctime>
+#include <chrono>
 
 #define MAX_PIXELS 256
 #define IMG_SIZE MAX_PIXELS * MAX_PIXELS * 3
 
+typedef std::chrono::time_point<std::chrono::system_clock> time_point;
+
 typedef struct Timestamp {
-    clock_t init_time;
-    clock_t push_time;
-    clock_t pop_time;
+    time_point init_time;
+    time_point push_time;
+    time_point pop_time;
 } Timestamp;
 
 typedef struct ImageRaw {

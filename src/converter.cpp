@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
         cv::imshow("Converter", img);
 
         v.data = process(img);
-        v.tstamp.init_time = clock();
+        v.tstamp.init_time = std::chrono::system_clock::now();
         v.img_tstamp = m.tstamp;
 
         down(pqB->getSemid(), EMPTY);

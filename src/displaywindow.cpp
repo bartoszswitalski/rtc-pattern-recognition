@@ -1,7 +1,5 @@
 #include "displaywindow.hpp"
 
-
-
 DisplayWindow::DisplayWindow() {
     shmidB = shmget(KEY_B, sizeof(PQueue<ProcessedValue>), 0);
     pqB = (PQueue<ProcessedValue> *)shmat(shmidB, NULL, 0);
@@ -37,11 +35,19 @@ bool DisplayWindow::on_new_value() {
 
     view->set_text(std::to_string(v.data));
 
-    std::ofstream fout;
-    fout.open("../times.log", std::ios::app);
-    fout<<v.img_tstamp.init_time<<" "<<v.img_tstamp.push_time<<" "<<v.img_tstamp.pop_time<<" "<<v.tstamp.init_time<<" "<<v.tstamp.push_time<<" "<<v.tstamp.pop_time<<std::endl;
-    fout.close();
+    log_time(v);
 
     return true;
 }
 
+void DisplayWindow::log_time(ProcessedValue v) {
+    std::ofstream fout;
+    fout.open("times.log", std::ios::app);
+    fout<<std::chrono::duration_cast<std::chrono::nanoseconds>(v.img_tstamp.init_time.time_since_epoch()).count()<<" "
+        <<std::chrono::duration_cast<std::chrono::nanoseconds>(v.img_tstamp.push_time.time_since_epoch()).count()<<" "
+        <<std::chrono::duration_cast<std::chrono::nanoseconds>(v.img_tstamp.pop_time.time_since_epoch()).count()<<" "
+        <<std::chrono::duration_cast<std::chrono::nanoseconds>(v.tstamp.init_time.time_since_epoch()).count()<<" "
+        <<std::chrono::duration_cast<std::chrono::nanoseconds>(v.tstamp.push_time.time_since_epoch()).count()<<" "
+        <<std::chrono::duration_cast<std::chrono::nanoseconds>(v.tstamp.pop_time.time_since_epoch()).count()<<std::endl;
+    fout.close();
+}

@@ -19,4 +19,5 @@ class DisplayWindow : public Gtk::Window {
         int shmidB;
         PQueue<ProcessedValue> *pqB;
         Gtk::Label *view;
+        void log_time(ProcessedValue v);
 };

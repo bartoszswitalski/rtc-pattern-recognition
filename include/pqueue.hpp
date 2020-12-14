@@ -34,7 +34,7 @@ public:
     ~PQueue() {};
 
     bool push(T *m) {
-        m->tstamp.push_time = clock();
+        m->tstamp.push_time = std::chrono::system_clock::now();
         this->buf[this->bufSize] = *m;
         (this->bufSize)++;
 
@@ -48,7 +48,7 @@ public:
             // TODO
         } else {
             m = this->buf[0];
-            m.tstamp.pop_time = clock();
+            m.tstamp.pop_time = std::chrono::system_clock::now();
         
             if (this->bufSize == 1) {
                 this->bufSize = 0;

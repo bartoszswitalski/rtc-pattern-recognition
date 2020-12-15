@@ -16,10 +16,10 @@ make
 ../run_stressed.sh
 
 # simulate cpu workload stress and run all programs in SCHED_FIFO mode
-../run_stressed_fifo_all.sh
+sudo ../run_stressed_fifo_all.sh
 
 # simulate cpu workload stress and run converter in SCHED_FIFO mode
-../run_stressed_fifo_conv.sh
+sudo ../run_stressed_fifo_conv.sh
 ```
 
 ## Prerequisites

@@ -16,6 +16,10 @@ cv::Rect getCropROI(cv::VideoCapture *camera) {
 }
 
 int main() {
+//    struct sched_param sp;
+//    sp.sched_priority = 99;
+//    sched_setscheduler(0, SCHED_FIFO, &sp);
+
     cv::VideoCapture camera(CAMERA_IDX);
 
     if (!camera.isOpened()) {

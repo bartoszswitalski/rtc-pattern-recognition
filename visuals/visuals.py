@@ -109,7 +109,7 @@ def plot_boxplot(message_times):
 
     ax.set_title('Message processing time')
     ax.set_xlabel('message state')
-    ax.set_ylabel('time')
+    ax.set_ylabel('time [ns]')
     ax.set_yscale("log")
 
     ax.boxplot(message_times, labels=['raw idle', 'raw queue', 'raw->proc', 'proc idle', 'proc queue'])

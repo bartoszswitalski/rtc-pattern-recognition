@@ -1,11 +1,13 @@
 #pragma once
 
 #include <sys/shm.h>
+#include <sched.h>
+#include <unistd.h>
 
 #include "message.hpp"
 #include "semaphoreop.hpp"
 
-#define CAP 20
+#define CAP 10
 #define SEM_NUM 3 /* semaphores per queue */
 #define PQ_A 'A'
 #define PQ_B 'B'

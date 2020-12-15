@@ -73,6 +73,10 @@ double process(cv::Mat img) {
 }
 
 int main(int argc, char *argv[]) {
+//    struct sched_param sp;
+//    sp.sched_priority = 99;
+//    sched_setscheduler(0, SCHED_FIFO, &sp);
+
     if (argc != CONV_ARGS) {
         std::cout << "Usage: ./converter config.txt" << std::endl;
         return 1;
